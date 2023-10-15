@@ -2,13 +2,13 @@ const handleLoadData = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/videos/categories')
     const data = await res.json();
     const dataCategories = data.data;
-    console.log(dataCategories)
+    // console.log(dataCategories)
     const container = document.getElementById('container');
 
     dataCategories.forEach((data) => {
         const div = document.createElement('div');
         div.innerHTML = `
-        <button onclick="btnHandle('${data.category_id}')" class="btn btn-outline btn-gray">${data?.category || 'no data'}</button>
+        <button onclick="btnHandle('${data.category_id}')" class="btn btn-outline btn-gray">${data?.category}</button>
     `;
         container.appendChild(div);
     })
@@ -22,20 +22,24 @@ const btnHandle = async (categoryId) => {
     const loadData = data.data;
     console.log(loadData)
     const cardContainer = document.getElementById('card-container')
+    console.log(cardContainer)
+
+    cardContainer.innerText = cardContainer || 'no'
+
     cardContainer.innerHTML = '';
     loadData.forEach((data) => {
         const div = document.createElement('div');
         div.innerHTML = `
-        <div class="card bg-base-100 shadow-xl h-96">
+        <div class="card bg-base-100 shadow-xl w-full h-96">
         <figure><img class="h-56 rounded-lg"  src="${data?.thumbnail}" alt="Shoes" /></figure>
         <div class="absolute bg-black text-white right-0 top-48 rounded px-5 right-2">
-        <p>${data?.others?.posted_date / 60 || ''}</p >
+        <p>${data?.others?.secondsToMinutesAndHours}</p >
         </div >
     <div class="flex gap-5 my-5 ps-2">
         <img class="w-16 h-16 rounded-full" src="${data?.authors[0]?.profile_picture}" alt="Shoes" alt="">
             <div>
                 <p>${data.title}</p>
-                <p>${data?.authors[0]?.profile_name} ${data?.authors[0]?.verified || ''}</p>
+                <p>${data?.authors[0]?.profile_name} ${data?.authors[0]?.verified ? ' <i class="fa-regular fa-circle-check bg-blue-500 rounded-full text-white"></i>' : ''}</p>
                 <p>${data?.others?.views}</p>
             </div>
     </div>
@@ -44,4 +48,16 @@ const btnHandle = async (categoryId) => {
         cardContainer.appendChild(div);
     })
 }
+
+function secondsToMinutesAndHours(posted_date) {
+    const hours = Math.floor(posted_date / (60 * 60));
+    const divisor_for_minutes = posted_date % (60 * 60);
+    const minutes = Math.floor(divisor_for_minutes / 60);
+    const object = {
+        "hrs": hours,
+        "min": minutes,
+    };
+    return object;
+}
+console.log(secondsToMinutesAndHours(16278))
 handleLoadData()
