@@ -16,15 +16,13 @@ const handleLoadData = async () => {
 }
 
 const btnHandle = async (categoryId) => {
-    console.log(categoryId)
+    // console.log(categoryId)
     const res = await fetch(`https://openapi.programming-hero.com/api/videos/category/${categoryId}`)
+    console.log(res)
     const data = await res.json();
     const loadData = data.data;
     console.log(loadData)
     const cardContainer = document.getElementById('card-container')
-    console.log(cardContainer)
-
-    cardContainer.innerText = cardContainer || 'no'
 
     cardContainer.innerHTML = '';
     loadData.forEach((data) => {
@@ -59,5 +57,19 @@ function secondsToMinutesAndHours(posted_date) {
     };
     return object;
 }
-console.log(secondsToMinutesAndHours(16278))
+// console.log(secondsToMinutesAndHours(16278))
+
+const handleBtn = () => {
+    const sort = document.getElementById('sort')
+    const div = document.createElement('div');
+    div.innerHTML = `<button onclick="handleBtnSort()" class="btn btn-ghost normal-case text-xl">Sort by
+    view</button > `
+    sort.appendChild(div)
+}
+handleBtn()
+
+const handleBtnSort = (categoryId) => {
+    console.log(categoryId)
+}
+handleBtnSort()
 handleLoadData()
